@@ -12,12 +12,5 @@ app.use('/api/users', userRoutes);
 app.use('/api/questions', questionRoutes);
 
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
-
-// Catch-all handler for all routes (i.e., for client-side routing by React Router)
-app.get('/api/users', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-});
-
 module.exports = app;
+

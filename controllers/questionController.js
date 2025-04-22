@@ -19,3 +19,33 @@ exports.getAllQuestions = async (req, res) => {
   const questions = await Question.find().populate('user', 'name').sort({ createdAt: -1 });
   res.json(questions);
 };
+
+exports.getAllQuestionsWithAnswers = async (req, res) => {
+  try {
+    const questions = await Question.find()
+      .populate('user', 'name')  // Populating the user who posted the question
+      .populate('answers.user', 'name')  // Populating the user who posted the answers
+      .sort({ createdAt: -1 }); // Sorting by creation date (newest first)
+    
+    // Structuring the response with question and answers together
+    const formattedQuestions = questions.map(question => ({
+      _id: question._id,
+      title: question.title,
+      body: question.body,
+      tags: question.tags,
+      createdAt: question.createdAt,
+      updatedAt: question.updatedAt,
+      user: question.user, // The user who posted the question
+      answers: question.answers.map(answer => ({
+        text: answer.text,
+        user: answer.user, // The user who posted the answer
+        createdAt: answer.createdAt
+      }))
+    }));
+
+    res.json(formattedQuestions);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching questions and answers' });
+  }
+};
+
