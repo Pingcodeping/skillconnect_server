@@ -49,3 +49,21 @@ exports.getAllQuestionsWithAnswers = async (req, res) => {
   }
 };
 
+
+exports.getQuestionsByUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const questions = await Question.find({ user: userId })
+      .populate('user', 'name email')  // optionally populate user details
+      .populate('answers.user', 'name email') // optionally populate answer authors
+      .sort({ createdAt: -1 }); // newest first
+
+    res.json({ success: true, data: questions });
+  } catch (err) {
+    console.error("Error fetching user questions:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch questions" });
+  }
+};
+
+

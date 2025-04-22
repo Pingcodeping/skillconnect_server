@@ -5,7 +5,7 @@ const answerSchema = new mongoose.Schema({
   text: String,
   upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true });
-
+ 
 const questionSchema = new mongoose.Schema({
   title: String,
   body: String,
