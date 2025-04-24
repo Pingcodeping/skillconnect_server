@@ -15,9 +15,23 @@ exports.answerQuestion = async (req, res) => {
   res.json(question);
 };
 
+// exports.getAllQuestions = async (req, res) => {
+//   const questions = await Question.find().populate('user', 'name').sort({ createdAt: -1 });
+//   res.json(questions);
+// };
+
 exports.getAllQuestions = async (req, res) => {
-  const questions = await Question.find().populate('user', 'name').sort({ createdAt: -1 });
-  res.json(questions);
+  try {
+    const questions = await Question.find()
+      .populate('user', 'name') // Populate the user who asked the question
+      .populate('answers.user', 'name') // Populate the user who answered the question
+      .sort({ createdAt: -1 }); // Sort questions by creation date (newest first)
+    
+    res.json(questions);
+  } catch (err) {
+    console.error('Error fetching questions:', err);
+    res.status(500).json({ message: 'Error fetching questions' });
+  }
 };
 
 exports.getAllQuestionsWithAnswers = async (req, res) => {
