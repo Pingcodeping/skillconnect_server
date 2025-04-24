@@ -9,6 +9,12 @@ router.get('/me', auth, getProfile);
 router.post('/connect', auth, sendConnectionRequest);
 router.post('/accept', auth, acceptConnection);
 router.get('/getAllUsers',getAllUsers);
-router.get('/getconnectionsforuser',getconnectionsforuser)
+router.get('/getconnectionsforuser',getconnectionsforuser);
 
+const { recommendConnections } = require('../controllers/mlController');
+
+router.post('/recommend-connections', recommendConnections);
+
+
+  
 module.exports = router;
